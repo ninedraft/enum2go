@@ -1,7 +1,9 @@
 package cast
 
+// ΘEnum is a template singletone for code generation.
 var ΘEnum _ΘEnum
 
+// _ΘEnum is a template type for code generation.
 type _ΘEnum struct{}
 
 func (_ΘEnum) AllValues() []Θ { return nil }
