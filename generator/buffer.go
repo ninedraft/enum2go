@@ -23,6 +23,7 @@ func (buffer *Buffer) Open(filename string) error {
 	write("// START OF FILE: ")
 	write(filename)
 	write(delim)
+	write("\n")
 	buffer.currentFile = filename
 	return nil
 }
@@ -34,6 +35,7 @@ func (buffer *Buffer) Close() error {
 	write("// END OF FILE: ")
 	write(buffer.currentFile)
 	write(delim)
+	write("\n")
 	buffer.currentFile = ""
 	return nil
 }
