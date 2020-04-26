@@ -23,3 +23,8 @@ func (_ΘEnum) AllNames() []string { return nil }
 func (_ΘEnum) Parse(str string) (Θ, error) {
 	return 0, nil
 }
+
+func (_ΘEnum) Empty() Θ {
+	var empty Θ
+	return empty
+}
