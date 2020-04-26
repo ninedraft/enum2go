@@ -8,6 +8,12 @@ func (v Θ) String() (str string) {
 	return
 }
 
+// IsZero returns true if v is not initialized.
+func (v Θ) IsZero() bool {
+	var empty Θ
+	return v == empty
+}
+
 // IsValid returns true if the value of Θ is valid.
 func (v Θ) IsValid() bool {
 	return true
