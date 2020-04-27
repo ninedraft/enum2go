@@ -14,6 +14,7 @@ import (
 type enumSpec struct {
 	Package  string
 	Type     string
+	Pos      token.Pos
 	Kind     enumKind
 	Format   enumFormat
 	BaseType *ast.Ident
@@ -24,7 +25,7 @@ type (
 	enumKind int
 
 	_ struct {
-		undefined, string, int enumKind
+		Enum struct{ string, int enumKind }
 	}
 )
 
@@ -32,37 +33,21 @@ type (
 	enumFormat int
 
 	_ struct {
-		_, strict, snake, kebab enumFormat
+		Enum struct{ strict, snake, kebab enumFormat }
 	}
 )
 
-// ----------------------------------------------------------------
-
-const (
-	kindUndefined enumKind = iota
-	kindString
-	kindInt
-)
-
-const (
-	strict enumFormat = iota
-	snake
-	kebab
-)
-
-// ----------------------------------------------------------------
-
-func (enum *enumSpec) Pour(generator *Generator, cast *ast.File) {
+func (enum *enumSpec) Pour(generator *Config, cast *ast.File) {
+	enum.patchAST(generator, cast)
 	cast.Name = ast.NewIdent(enum.Package)
 	var values = enum.allValuesList().Elts
 	for i, name := range enum.Names {
-		cast.Decls = append(cast.Decls, enum.factory(generator, name, values[i]))
+		cast.Decls = append(cast.Decls, enum.factory(name, values[i]))
 	}
-	enum.patchAST(generator, cast)
 }
 
-func (enum *enumSpec) factory(generator *Generator, name *ast.Ident, value ast.Expr) *ast.FuncDecl {
-	var gadget = ast.NewIdent("_" + generator.typePlaceholder + "Enum")
+func (enum *enumSpec) factory(name *ast.Ident, value ast.Expr) *ast.FuncDecl {
+	var gadget = ast.NewIdent("_" + enum.Type + "Enum")
 	return &ast.FuncDecl{
 		Name: name,
 		Recv: &ast.FieldList{List: []*ast.Field{{Type: gadget}}},
@@ -82,7 +67,7 @@ func (enum *enumSpec) factory(generator *Generator, name *ast.Ident, value ast.E
 	}
 }
 
-func (enum *enumSpec) patchAST(generator *Generator, node ast.Node) {
+func (enum *enumSpec) patchAST(generator *Config, node ast.Node) {
 	astutil.Apply(node, func(cursor *astutil.Cursor) bool {
 		switch node := cursor.Node().(type) {
 		case *ast.Ident:
@@ -99,13 +84,13 @@ func (enum *enumSpec) patchAST(generator *Generator, node ast.Node) {
 	}, nil)
 }
 
-/*
-	String
-	IsValid
-	AllValues
-	AllNames
-	Parse
-*/
+var methods = strSet([]string{
+	"AllValues",
+	"AllNames",
+	"String",
+	"IsValid",
+	"Parse",
+})
 
 func (enum *enumSpec) castMethod(name string) []ast.Stmt {
 	switch name {
@@ -127,18 +112,18 @@ func (enum *enumSpec) methodIsValid() []ast.Stmt {
 	var input = ast.NewIdent("v")
 	var probe ast.Expr
 	switch enum.Kind {
-	case kindInt:
+	case enumKindEnum.Int():
 		var first = &ast.BasicLit{Kind: token.INT, Value: "1"}
 		var last = &ast.BasicLit{Kind: token.INT, Value: strconv.Itoa(len(enum.Names) - 1)}
 		probe = and(
 			leq(first, input),
 			leq(input, last),
 		)
-	case kindString:
+	case enumKindEnum.String():
 		var strs = enum.allNamesList().Elts
 		var first = strs[0]
 		probe = eq(first, input)
-		for _, str := range strs[1:] {
+		for _, str := range strs {
 			probe = or(
 				probe,
 				eq(str, input),
@@ -264,7 +249,7 @@ func (enum *enumSpec) valueConverter() func(i int) ast.Expr {
 	var converter func(i int) ast.Expr
 	var stringer = enum.stringer()
 	switch enum.Kind {
-	case kindString:
+	case enumKindEnum.String():
 		converter = func(i int) ast.Expr {
 			var name = stringer(i)
 			var lit = strconv.Quote(name)
@@ -273,9 +258,9 @@ func (enum *enumSpec) valueConverter() func(i int) ast.Expr {
 				Value: lit,
 			}
 		}
-	case kindInt:
+	case enumKindEnum.Int():
 		converter = func(i int) ast.Expr {
-			var lit = strconv.Itoa(i)
+			var lit = strconv.Itoa(i + 1)
 			return &ast.BasicLit{
 				Kind:  token.INT,
 				Value: lit,
@@ -291,12 +276,12 @@ func (enum *enumSpec) stringer() func(i int) string {
 		return name.Name
 	}
 	switch enum.Format {
-	case kebab:
+	case enumFormatEnum.Kebab():
 		stringer = func(i int) string {
 			var name = enum.Names[i].Name
 			return strcase.KebabCase(name)
 		}
-	case snake:
+	case enumFormatEnum.Snake():
 		stringer = func(i int) string {
 			var name = enum.Names[i].Name
 			return strcase.SnakeCase(name)
@@ -345,14 +330,6 @@ func makeErrorFormat(format string, args ...ast.Expr) *ast.CallExpr {
 		Args: append([]ast.Expr{formatLit}, args...),
 	}
 }
-
-var methods = strSet([]string{
-	"AllValues",
-	"AllNames",
-	"String",
-	"IsValid",
-	"Parse",
-})
 
 func strSet(items []string) map[string]bool {
 	var set = make(map[string]bool, len(items))

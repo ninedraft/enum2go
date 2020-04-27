@@ -33,8 +33,8 @@ func TestSpec(test *testing.T) {
 	var spec = enumSpec{
 		Package:  "result",
 		Type:     "Kind",
-		Kind:     kindInt,
-		Format:   kebab,
+		Kind:     enumKindEnum.Int(),
+		Format:   enumFormatEnum.Kebab(),
 		BaseType: ast.NewIdent("int"),
 		Names: []*ast.Ident{
 			ast.NewIdent("AaA"),
@@ -42,7 +42,7 @@ func TestSpec(test *testing.T) {
 			ast.NewIdent("C"),
 		},
 	}
-	var gen = &Generator{
+	var gen = &Config{
 		typePlaceholder: "Θ",
 	}
 	spec.Pour(gen, cast)
