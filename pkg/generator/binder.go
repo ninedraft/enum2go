@@ -76,14 +76,14 @@ func bindSpecs(fset *token.FileSet, pkg *ast.Package) (*specBinder, error) {
 		return binder.specs[i].Type < binder.specs[j].Type
 	})
 
-	var errBind = binder.Validate(fset)
+	var errBind = binder.bake(fset)
 	if errBind != nil {
 		return nil, errBind
 	}
 	return binder, nil
 }
 
-func (binder *specBinder) Validate(fset *token.FileSet) error {
+func (binder *specBinder) bake(fset *token.FileSet) error {
 	var errBind error
 	var visited = make(map[string]*enumSpec, len(binder.specs))
 	for _, spec := range binder.specs {
@@ -111,6 +111,8 @@ func (binder *specBinder) Validate(fset *token.FileSet) error {
 			multierr.AppendInto(&errBind, err)
 		default:
 			visited[spec.Type] = spec
+			spec.Kind = alias.Kind
+			spec.BaseType = alias.BaseType
 		}
 	}
 	return errBind

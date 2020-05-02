@@ -25,7 +25,7 @@ type (
 	enumKind int
 
 	_ struct {
-		Enum struct{ string, int enumKind }
+		Enum struct{ String, Int enumKind }
 	}
 )
 
@@ -33,7 +33,7 @@ type (
 	enumFormat int
 
 	_ struct {
-		Enum struct{ strict, snake, kebab enumFormat }
+		Enum struct{ Strict, Snake, Kebab enumFormat }
 	}
 )
 
@@ -129,6 +129,8 @@ func (enum *enumSpec) methodIsValid() []ast.Stmt {
 				eq(str, input),
 			)
 		}
+	default:
+		return nil
 	}
 	return []ast.Stmt{
 		&ast.ReturnStmt{
@@ -159,11 +161,11 @@ func (enum *enumSpec) methodString() []ast.Stmt {
 		Fun:  enum.BaseType,
 		Args: []ast.Expr{input},
 	}
-	var err = makeStringFormat("unexpected value %v. Valid values: %v", baseValue, enum.allNamesList())
+	var errString = makeStringFormat("unexpected value %v. Valid values: %v", baseValue, enum.allNamesList())
 	sw.Body.List = append(sw.Body.List,
 		&ast.CaseClause{
 			Body: []ast.Stmt{
-				&ast.ReturnStmt{Results: []ast.Expr{err}},
+				&ast.ReturnStmt{Results: []ast.Expr{errString}},
 			},
 		})
 	return []ast.Stmt{sw}
@@ -290,18 +292,7 @@ func (enum *enumSpec) stringer() func(i int) string {
 	return stringer
 }
 
-func makeErrorString(str ast.Expr) *ast.CallExpr {
-	var newErr = &ast.SelectorExpr{
-		X:   ast.NewIdent("errors"),
-		Sel: ast.NewIdent("New"),
-	}
-	return &ast.CallExpr{
-		Fun:  newErr,
-		Args: []ast.Expr{str},
-	}
-}
-
-func makeStringFormat(format string, args ...ast.Expr) *ast.CallExpr {
+func makeStringFormat(format string, args ...ast.Expr) ast.Expr {
 	var newErr = &ast.SelectorExpr{
 		X:   ast.NewIdent("fmt"),
 		Sel: ast.NewIdent("Sprintf"),
