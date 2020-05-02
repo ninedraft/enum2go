@@ -8,6 +8,7 @@ import (
 	"golang.org/x/tools/go/ast/astutil"
 )
 
+// MergeFiles merge multiple files into a single file and merge the imports.
 func MergeFiles(dst *ast.File, files []*ast.File) {
 	var imports []*ast.ImportSpec
 	for _, file := range files {
@@ -21,6 +22,7 @@ func MergeFiles(dst *ast.File, files []*ast.File) {
 		if isGenDecl && decl.Tok == token.IMPORT {
 			cursor.Delete()
 		}
+
 		return true
 	}, nil)
 
