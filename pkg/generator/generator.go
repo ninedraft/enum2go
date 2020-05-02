@@ -6,7 +6,6 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
-	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -15,19 +14,14 @@ import (
 	"github.com/ninedraft/enum2go/pkg/static"
 )
 
+// Config describes some
 type Config struct {
 	Dir             string
 	TargetFile      string
 	TypePlaceholder string
 }
 
-type FileWriter interface {
-	io.Writer
-	io.Closer
-
-	Open(filename string) error
-}
-
+// Run generates enum definitions using config data and specs in user code.
 func Run(cfg *Config) error {
 	var fset = token.NewFileSet()
 	var pkgs, errParse = parser.ParseDir(fset, cfg.Dir, fileFilter, parser.AllErrors)
