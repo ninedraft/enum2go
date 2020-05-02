@@ -45,7 +45,7 @@ func TestSpec(test *testing.T) {
 		},
 	}
 	var gen = &Config{
-		typePlaceholder: "Θ",
+		TypePlaceholder: "Θ",
 	}
 	spec.Pour(gen, cast)
 	if err := format.Node(ioutil.Discard, fset, cast); err != nil {

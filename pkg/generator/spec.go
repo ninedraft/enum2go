@@ -37,8 +37,8 @@ type (
 	}
 )
 
-func (enum *enumSpec) Pour(generator *Config, cast *ast.File) {
-	enum.patchAST(generator, cast)
+func (enum *enumSpec) Pour(cfg *Config, cast *ast.File) {
+	enum.patchAST(cfg, cast)
 	cast.Name = ast.NewIdent(enum.Package)
 	var values = enum.allValuesList().Elts
 	for i, name := range enum.Names {
@@ -71,7 +71,7 @@ func (enum *enumSpec) patchAST(generator *Config, node ast.Node) {
 	astutil.Apply(node, func(cursor *astutil.Cursor) bool {
 		switch node := cursor.Node().(type) {
 		case *ast.Ident:
-			node.Name = strings.ReplaceAll(node.Name, generator.typePlaceholder, enum.Type)
+			node.Name = strings.ReplaceAll(node.Name, generator.TypePlaceholder, enum.Type)
 		case *ast.FuncDecl:
 			var name = node.Name.String()
 			if methods[name] {
