@@ -8,6 +8,8 @@ import (
 	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/ninedraft/enum2go/pkg/astx"
 )
 
 func TestSpec(test *testing.T) {
@@ -15,7 +17,7 @@ func TestSpec(test *testing.T) {
 	var filter = func(file os.FileInfo) bool {
 		return true
 	}
-	var pkgs, errPars = parser.ParseDir(fset, "cast", filter, parser.AllErrors)
+	var pkgs, errPars = parser.ParseDir(fset, "enumcast", filter, parser.AllErrors)
 	if errPars != nil {
 		test.Fatal(errPars)
 	}
@@ -28,7 +30,7 @@ func TestSpec(test *testing.T) {
 		files = append(files, file)
 	}
 	var cast = &ast.File{}
-	mergeFiles(cast, files)
+	astx.MergeFiles(cast, files)
 
 	var spec = enumSpec{
 		Package:  "result",

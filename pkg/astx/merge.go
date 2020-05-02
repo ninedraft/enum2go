@@ -1,26 +1,14 @@
-package generator
+package astx
 
 import (
 	"go/ast"
 	"go/token"
-	"io"
 	"strconv"
 
 	"golang.org/x/tools/go/ast/astutil"
 )
 
-type Config struct {
-	typePlaceholder string
-}
-
-type FileWriter interface {
-	io.Writer
-	io.Closer
-
-	Open(filename string) error
-}
-
-func mergeFiles(dst *ast.File, files []*ast.File) {
+func MergeFiles(dst *ast.File, files []*ast.File) {
 	var imports []*ast.ImportSpec
 	for _, file := range files {
 		dst.Decls = append(dst.Decls, file.Decls...)
