@@ -45,6 +45,9 @@ func init() {
 
 	// int types
 
+	intTypes["byte"] = struct{}{}
+	allow("byte")
+	
 	intTypes["int"] = struct{}{}
 	allow("int")
 
