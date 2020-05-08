@@ -23,6 +23,7 @@ import (
 func Generate() error {
 	return multierr.Combine(
 		embeddedCast(),
+		embeddedUsage(),
 	)
 }
 
@@ -62,4 +63,20 @@ func filterCastFiles(file os.FileInfo) bool {
 	var isNotTest = !strings.HasSuffix(file.Name(), "_test.go")
 	var isNotManifest = file.Name() != "pkg.go"
 	return isNotTest && isNotManifest
+}
+
+func embeddedUsage() error {
+	var usageFile = filepath.Join("doc", "usage.md")
+	var usage, errRead = ioutil.ReadFile(usageFile)
+	if errRead != nil {
+		return errRead
+	}
+	usage = bytes.TrimSpace(usage)
+
+	var result = bytes.NewBufferString(
+		"// code generate by mage script. DO NOT EDIT.\n\n" +
+			"package static\n\n",
+	)
+	_, _ = fmt.Fprintf(result, "const Usage = %q\n\n", usage)
+	return ioutil.WriteFile("pkg/static/usage.go", result.Bytes(), 0755)
 }
