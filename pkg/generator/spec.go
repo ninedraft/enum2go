@@ -67,11 +67,13 @@ func (enum *enumSpec) factory(name *ast.Ident, value ast.Expr) *ast.FuncDecl {
 	}
 }
 
+const typePlaceholder = "Θ"
+
 func (enum *enumSpec) patchAST(generator *Config, node ast.Node) {
 	astutil.Apply(node, func(cursor *astutil.Cursor) bool {
 		switch node := cursor.Node().(type) {
 		case *ast.Ident:
-			node.Name = strings.ReplaceAll(node.Name, generator.TypePlaceholder, enum.Type)
+			node.Name = strings.ReplaceAll(node.Name, typePlaceholder, enum.Type)
 		case *ast.FuncDecl:
 			var name = node.Name.String()
 			if methods[name] {

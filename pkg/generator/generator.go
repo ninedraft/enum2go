@@ -16,9 +16,8 @@ import (
 
 // Config describes some
 type Config struct {
-	Dir             string
-	TargetFile      string
-	TypePlaceholder string
+	Dir        string
+	TargetFile string
 }
 
 // Run generates enum definitions using config data and specs in user code.

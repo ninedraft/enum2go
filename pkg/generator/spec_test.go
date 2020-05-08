@@ -44,9 +44,7 @@ func TestSpec(test *testing.T) {
 			ast.NewIdent("C"),
 		},
 	}
-	var gen = &Config{
-		TypePlaceholder: "Θ",
-	}
+	var gen = &Config{}
 	spec.Pour(gen, cast)
 	if err := format.Node(ioutil.Discard, fset, cast); err != nil {
 		test.Fatal(err)
