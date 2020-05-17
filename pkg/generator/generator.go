@@ -50,7 +50,7 @@ func Run(cfg *Config) error {
 		return err
 	}
 	var target = filepath.Join(cfg.Dir, cfg.TargetFile)
-	return ioutil.WriteFile(target, generated.Bytes(), 0755)
+	return ioutil.WriteFile(target, generated.Bytes(), 0600)
 }
 
 func fileFilter(os.FileInfo) bool { return true }
