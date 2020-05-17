@@ -39,7 +39,7 @@ For each spec and type tool will generate a singleton object `FruitEnum` of type
       func(_EnumFruit) Orange() Fruit { return 4 }
 ```
 
-For the Fruit type tool will generate util methods such as .String, .MarshalText, .IsValid, etc.
+For the Fruit type tool will generate util methods such as `.String`, `.MarshalText`, `.IsValid`, etc.
 
 ### Flags
 
