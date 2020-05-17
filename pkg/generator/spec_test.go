@@ -25,7 +25,7 @@ func TestSpec(test *testing.T) {
 	for _, p := range pkgs {
 		pkg = p
 	}
-	var files []*ast.File
+	var files = make([]*ast.File, 0, len(pkg.Files))
 	for _, file := range pkg.Files {
 		files = append(files, file)
 	}
