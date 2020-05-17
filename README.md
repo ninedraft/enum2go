@@ -1,5 +1,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
+  - [CLI](#cli)
   - [Flags](#flags)
 
 ## Installation
