@@ -38,7 +38,7 @@ type (
 )
 
 func (enum *enumSpec) Pour(cfg *Config, cast *ast.File) {
-	enum.patchAST(cfg, cast)
+	enum.patchAST(cast)
 	cast.Name = ast.NewIdent(enum.Package)
 	var values = enum.allValuesList().Elts
 	for i, name := range enum.Names {
@@ -69,7 +69,7 @@ func (enum *enumSpec) factory(name *ast.Ident, value ast.Expr) *ast.FuncDecl {
 
 const typePlaceholder = "Θ"
 
-func (enum *enumSpec) patchAST(generator *Config, node ast.Node) {
+func (enum *enumSpec) patchAST(node ast.Node) {
 	astutil.Apply(node, func(cursor *astutil.Cursor) bool {
 		switch node := cursor.Node().(type) {
 		case *ast.Ident:

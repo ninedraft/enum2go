@@ -155,21 +155,22 @@ func (binder *specBinder) ParseSpec(node *ast.TypeSpec) (*enumSpec, bool) {
 	if !isSpecStruct {
 		return nil, false
 	}
-	var spec *enumSpec
-	for _, field := range specStruct.Fields.List {
-		spec = &enumSpec{
-			Pos:    specField.Pos(),
-			Format: enumFormatEnum.Strict(),
-		}
-		var tName = typeName(field.Type)
-		if tName == "" {
-			return nil, false
-		}
-		spec.Type = tName
-		spec.Names = append(spec.Names, field.Names...)
-		break
+	var fields = specStruct.Fields.List
+	if len(fields) == 0 {
+		return nil, false
 	}
-	return spec, spec != nil
+	var field = fields[0]
+	var spec = &enumSpec{
+		Pos:    specField.Pos(),
+		Format: enumFormatEnum.Strict(),
+	}
+	var tName = typeName(field.Type)
+	if tName == "" {
+		return nil, false
+	}
+	spec.Type = tName
+	spec.Names = append(spec.Names, field.Names...)
+	return spec, true
 }
 
 func getField(spec *ast.StructType, name string) *ast.Field {

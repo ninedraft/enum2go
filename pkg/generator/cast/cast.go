@@ -9,15 +9,19 @@ import (
 	"io"
 )
 
+// Cast describes a generic AST template.
 type Cast interface {
 	File() (*ast.File, *token.FileSet)
 }
 
+// Serialized is byte buffer baked AST template.
 type Serialized struct {
 	name string
 	data []byte
 }
 
+// MustFromRe creates a serialized AST from given byte source.
+// Panics on error
 func MustFromRe(filename string, src io.Reader) *Serialized {
 	var cast, err = FromRe(filename, src)
 	if err != nil {
@@ -26,6 +30,8 @@ func MustFromRe(filename string, src io.Reader) *Serialized {
 	return cast
 }
 
+// FromRe creates a new serialized AST template from given byte source.
+// Returns any error encountered.
 func FromRe(filename string, src io.Reader) (*Serialized, error) {
 	var fset = token.NewFileSet()
 	var data = &bytes.Buffer{}
@@ -49,6 +55,8 @@ func FromRe(filename string, src io.Reader) (*Serialized, error) {
 	}, nil
 }
 
+// FromAST creates a new serialized AST template from given AST.
+// If the AST template is invalid, this function can panic.
 func FromAST(filename string, file *ast.File) *Serialized {
 	var fset = token.NewFileSet()
 	var data = &bytes.Buffer{}
@@ -62,6 +70,7 @@ func FromAST(filename string, file *ast.File) *Serialized {
 	}
 }
 
+// AST return the internal AST template.
 func (cast *Serialized) AST() (*ast.File, *token.FileSet) {
 	var fset = token.NewFileSet()
 	var src = bytes.NewReader(cast.data)
@@ -72,8 +81,10 @@ func (cast *Serialized) AST() (*ast.File, *token.FileSet) {
 	return file, fset
 }
 
+// Reader returns the template as a byte reader.
 func (cast *Serialized) Reader() *bytes.Reader {
 	return bytes.NewReader(cast.data)
 }
 
+// Name returns the filename of the serialized template.
 func (cast *Serialized) Name() string { return cast.name }

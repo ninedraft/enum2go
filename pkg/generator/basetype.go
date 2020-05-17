@@ -47,7 +47,7 @@ func init() {
 
 	intTypes["byte"] = struct{}{}
 	allow("byte")
-	
+
 	intTypes["int"] = struct{}{}
 	allow("int")
 
@@ -67,5 +67,4 @@ func init() {
 	allow(
 		"string",
 	)
-
 }
