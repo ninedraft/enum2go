@@ -10,7 +10,7 @@ import (
 
 // MergeFiles merge multiple files into a single file and merge the imports.
 func MergeFiles(dst *ast.File, files []*ast.File) {
-	var imports []*ast.ImportSpec
+	var imports = make([]*ast.ImportSpec, 0, len(files))
 	for _, file := range files {
 		dst.Decls = append(dst.Decls, file.Decls...)
 		imports = append(imports, file.Imports...)
