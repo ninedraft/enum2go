@@ -21,7 +21,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
     - name: Test
-      run: go test ./...
+      run: go test -race ./...
   lint:
       name: golangci-lint
       runs-on: ubuntu-latest
