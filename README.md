@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/ninedraft/enum2go)](https://goreportcard.com/report/github.com/ninedraft/enum2go) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![go.dev reference](https://img.shields.io/badge/doc-go.dev-blue)](https://pkg.go.dev/mod/github.com/ninedraft/enum2go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ninedraft/enum2go)](https://goreportcard.com/report/github.com/ninedraft/enum2go) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![go.dev reference](https://img.shields.io/badge/doc-go.dev-blue)](https://pkg.go.dev/mod/github.com/ninedraft/enum2go) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ninedraft/enum2go/Test?style=plastic)
 
 - [Installation](#installation)
 - [Main idea](#main-idea)
