@@ -10,6 +10,11 @@ go get github.com/ninedraft/enum2go
 
 ## Usage
 
+### CLI
+```sh
+enum2go -dir ./
+```
+
 Tool generates enum definitions for Golang. It supports `string`, `byte`, `int(*)` and `uint(*)` base types. To generate enum specs for a specific type, the tool searches for enum specs in the source code.
   
 Example spec:
