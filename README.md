@@ -1,4 +1,5 @@
 - [Installation](#installation)
+- [Main idea](#main-idea)
 - [Usage](#usage)
   - [CLI](#cli)
   - [Flags](#flags)
@@ -9,12 +10,7 @@
 go get github.com/ninedraft/enum2go
 ```
 
-## Usage
-
-### CLI
-```sh
-enum2go -dir ./
-```
+## Main idea
 
 Tool generates enum definitions for Golang. It supports `string`, `byte`, `int(*)` and `uint(*)` base types. To generate enum specs for a specific type, the tool searches for enum specs in the source code.
   
@@ -46,6 +42,14 @@ For each spec and type tool will generate a singleton object `FruitEnum` of type
 ```
 
 For the Fruit type tool will generate util methods such as `.String`, `.MarshalText`, `.IsValid`, etc.
+
+## Usage
+
+### CLI
+
+```sh
+enum2go -dir ./
+```
 
 ### Flags
 
