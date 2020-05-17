@@ -3,6 +3,9 @@
 - [Usage](#usage)
   - [CLI](#cli)
   - [Flags](#flags)
+- [Licensing](#licensing)
+  - [Code generation output](#code-generation-output)
+  - [Tool source code](#tool-source-code)
 
 ## Installation
 
@@ -57,3 +60,39 @@ enum2go -dir ./
 |-----------|--------|---------------------------------------------------------|
 | -d, --dir | string | package dir to parse                                    |
 | -o, --out | string | file to generated result (default "enums_generated.go") |
+
+## Licensing
+
+### Code generation output
+
+[![](https://upload.wikimedia.org/wikipedia/commons/6/69/CC0_button.svg)](https://creativecommons.org/publicdomain/zero/1.0/deed.en)
+
+You can copy, modify, distribute and use in the other ways the generated code, even for commercial purposes, all without asking permission.
+
+### Tool source code
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+```
+MIT License
+
+Copyright (c) 2020 Petrukhin Pavel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
