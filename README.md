@@ -10,7 +10,7 @@
 ## Installation
 
 ```sh
-go get github.com/ninedraft/enum2go
+go get github.com/ninedraft/enum2go/cmd/enum2go
 ```
 
 ## Main idea
