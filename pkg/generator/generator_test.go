@@ -133,7 +133,7 @@ func validateGeneratedCode(test *testing.T, issue Issue, data io.Reader) {
 
 	var object = pkg.Scope().Lookup("_FooEnum")
 	if object == nil || object.Type() == nil {
-		test.Errorf("generated enum type not found. Available names: %v", pkg.Scope())
+		test.Errorf("generated enum type not found. Available names: %v", pkg.Scope().Names())
 		return
 	}
 	var named, isNamed = object.Type().(*types.Named)
