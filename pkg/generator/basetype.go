@@ -64,6 +64,7 @@ func init() {
 	}
 
 	// string types
+	stringTypes["string"] = struct{}{}
 	allow(
 		"string",
 	)
