@@ -30,7 +30,7 @@ func (_enumFormatEnum) Parse(str string) (enumFormat, error) {
 	case "Kebab":
 		return 3, nil
 	default:
-		return empty, fmt.Errorf("unexpected value %q. Valid inputs: %v", str, []string{"Strict", "Snake", "Kebab"})
+		return empty, fmt.Errorf("unexpected value %q. Valid inputs: %v", str, enumFormatEnum.AllNames())
 	}
 }
 func (_enumFormatEnum) Empty() enumFormat {
@@ -46,7 +46,7 @@ func (v enumFormat) String() (str string) {
 	case 3:
 		return "Kebab"
 	default:
-		return fmt.Sprintf("unexpected value %v. Valid values: %v", int(v), []string{"Strict", "Snake", "Kebab"})
+		return fmt.Sprintf("unexpected value %v. Valid values: %v", int(v), enumFormatEnum.AllNames())
 	}
 }
 func (v enumFormat) IsZero() bool {
@@ -104,7 +104,7 @@ func (_enumKindEnum) Parse(str string) (enumKind, error) {
 	case "Int":
 		return 2, nil
 	default:
-		return empty, fmt.Errorf("unexpected value %q. Valid inputs: %v", str, []string{"String", "Int"})
+		return empty, fmt.Errorf("unexpected value %q. Valid inputs: %v", str, enumKindEnum.AllNames())
 	}
 }
 func (_enumKindEnum) Empty() enumKind {
@@ -118,7 +118,7 @@ func (v enumKind) String() (str string) {
 	case 2:
 		return "Int"
 	default:
-		return fmt.Sprintf("unexpected value %v. Valid values: %v", int(v), []string{"String", "Int"})
+		return fmt.Sprintf("unexpected value %v. Valid values: %v", int(v), enumKindEnum.AllNames())
 	}
 }
 func (v enumKind) IsZero() bool {

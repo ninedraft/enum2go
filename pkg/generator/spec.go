@@ -33,7 +33,9 @@ type (
 	enumFormat int
 
 	_ struct {
-		Enum struct{ Strict, Snake, Kebab enumFormat }
+		Enum struct {
+			Strict, Snake, Kebab enumFormat
+		}
 	}
 )
 
@@ -47,7 +49,7 @@ func (enum *enumSpec) Pour(cfg *Config, cast *ast.File) {
 }
 
 func (enum *enumSpec) factory(name *ast.Ident, value ast.Expr) *ast.FuncDecl {
-	var gadget = ast.NewIdent("_" + enum.Type + "Enum")
+	var gadget = enum.gadget()
 	return &ast.FuncDecl{
 		Name: name,
 		Recv: &ast.FieldList{List: []*ast.Field{{Type: gadget}}},
@@ -65,6 +67,14 @@ func (enum *enumSpec) factory(name *ast.Ident, value ast.Expr) *ast.FuncDecl {
 			},
 		},
 	}
+}
+
+func (enum *enumSpec) gadget() *ast.Ident {
+	return ast.NewIdent("_" + enum.Type + "Enum")
+}
+
+func (enum *enumSpec) gadgetValueRef() *ast.Ident {
+	return ast.NewIdent(enum.Type + "Enum")
 }
 
 const typePlaceholder = "Θ"
@@ -125,7 +135,7 @@ func (enum *enumSpec) methodIsValid() []ast.Stmt {
 		var strs = enum.allNamesList().Elts
 		var first = strs[0]
 		probe = eq(first, input)
-		for _, str := range strs {
+		for _, str := range strs[1:] {
 			probe = or(
 				probe,
 				eq(str, input),
@@ -163,7 +173,7 @@ func (enum *enumSpec) methodString() []ast.Stmt {
 		Fun:  enum.BaseType,
 		Args: []ast.Expr{input},
 	}
-	var errString = makeStringFormat("unexpected value %v. Valid values: %v", baseValue, enum.allNamesList())
+	var errString = makeStringFormat("unexpected value %v. Valid values: %v", baseValue, enum.allNamesValuesRef())
 	sw.Body.List = append(sw.Body.List,
 		&ast.CaseClause{
 			Body: []ast.Stmt{
@@ -234,7 +244,8 @@ func (enum *enumSpec) methodParse() []ast.Stmt {
 				},
 			})
 	}
-	var err = makeErrorFormat("unexpected value %q. Valid inputs: %v", input, enum.allNamesList())
+
+	var err = makeErrorFormat("unexpected value %q. Valid inputs: %v", input, enum.allNamesValuesRef())
 	sw.Body.List = append(sw.Body.List,
 		&ast.CaseClause{
 			Body: []ast.Stmt{
@@ -247,6 +258,11 @@ func (enum *enumSpec) methodParse() []ast.Stmt {
 		},
 		sw,
 	}
+}
+
+func (enum *enumSpec) allNamesValuesRef() *ast.CallExpr {
+	var method = &ast.SelectorExpr{X: enum.gadgetValueRef(), Sel: ast.NewIdent("AllNames")}
+	return &ast.CallExpr{Fun: method}
 }
 
 func (enum *enumSpec) valueConverter() func(i int) ast.Expr {
@@ -349,7 +365,7 @@ func eq(left, right ast.Expr) *ast.BinaryExpr {
 }
 
 func or(left, right ast.Expr) *ast.BinaryExpr {
-	return op(left, token.OR, right)
+	return op(left, token.LOR, right)
 }
 
 func and(left, right ast.Expr) *ast.BinaryExpr {

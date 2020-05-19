@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"sort"
 
+	"github.com/ninedraft/enum2go/pkg/astx"
 	"go.uber.org/multierr"
 	"golang.org/x/tools/go/ast/inspector"
 )
@@ -167,8 +168,26 @@ func (binder *specBinder) ParseSpec(node *ast.TypeSpec) (*enumSpec, bool) {
 		}
 		spec.Names = append(spec.Names, field.Names...)
 	}
-
+	binder.parseOptions(spec, fields)
 	return spec, true
+}
+
+func (binder *specBinder) parseOptions(spec *enumSpec, cfg []*ast.Field) {
+	var matcher = astx.FieldMatcher{}
+	var opts = matcher.Select("opt", cfg)
+	if opts == nil {
+		return
+	}
+	var optData, isInterface = opts.Type.(*ast.InterfaceType)
+	if !isInterface {
+		return
+	}
+	switch {
+	case matcher.Match("snake", optData.Methods.List):
+		spec.Format = enumFormatEnum.Snake()
+	case matcher.Match("kebab", optData.Methods.List):
+		spec.Format = enumFormatEnum.Kebab()
+	}
 }
 
 func getField(spec *ast.StructType, name string) *ast.Field {

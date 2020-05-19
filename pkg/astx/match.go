@@ -25,11 +25,12 @@ func (fm FieldMatcher) Match(name string, fields []*ast.Field) bool {
 // Filter returns fields which match the given name.
 func (fm FieldMatcher) Filter(name string, fields []*ast.Field) []*ast.Field {
 	var eq = fm.eq()
-	var names = fm.names()
 	var filtered []*ast.Field
-	for i, method := range names(fields) {
-		if eq(method, name) {
-			filtered = append(filtered, fields[i])
+	for i, method := range fields {
+		for _, methodName := range method.Names {
+			if eq(methodName.Name, name) {
+				filtered = append(filtered, fields[i])
+			}
 		}
 	}
 	return filtered
@@ -38,10 +39,11 @@ func (fm FieldMatcher) Filter(name string, fields []*ast.Field) []*ast.Field {
 // Select returns field, which matches the given name or nil.
 func (fm FieldMatcher) Select(name string, fields []*ast.Field) *ast.Field {
 	var eq = fm.eq()
-	var names = fm.names()
-	for i, method := range names(fields) {
-		if eq(method, name) {
-			return fields[i]
+	for i, method := range fields {
+		for _, methodName := range method.Names {
+			if eq(methodName.Name, name) {
+				return fields[i]
+			}
 		}
 	}
 	return nil
