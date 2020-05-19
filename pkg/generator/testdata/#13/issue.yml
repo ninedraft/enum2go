@@ -1,0 +1,4 @@
+name: Use all spec field
+link: https://github.com/ninedraft/enum2go/issues/13
+expected:
+  methods: [A, B, C, D, E] 
