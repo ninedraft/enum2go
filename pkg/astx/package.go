@@ -17,10 +17,14 @@ func SelectPkg(pkgs map[string]*ast.Package) (*ast.Package, error) {
 			nonTests = append(nonTests, pkg)
 		}
 	}
-	if len(nonTests) > 1 {
+	switch len(nonTests) {
+	case 0:
+		return nil, fmt.Errorf("no packages found")
+	case 1:
+		return nonTests[0], nil
+	default:
 		return nil, fmt.Errorf("found multiple non-tests packages: %v", PkgNames(pkgs))
 	}
-	return nonTests[0], nil
 }
 
 // PkgNames returns a sorted list of package names.
