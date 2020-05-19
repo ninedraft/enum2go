@@ -28,7 +28,15 @@ Example spec:
   
           // enum values definition. Must be in the same package.
           _ struct {
-              Enum struct { Apple, Banana, Peach, Orange Fruit }
+              Enum struct { 
+                Apple, Banana, Peach, Orange Fruit 
+                
+                // generation options
+                opt interface {
+                  // .String result format. Supported options: strict, snake, kebab
+                  snake()
+                }
+              }
           }
       )
 ```
