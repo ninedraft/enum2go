@@ -11,9 +11,7 @@ import (
 )
 
 type specBinder struct {
-	files     []*ast.File
-	filenames map[*ast.File]string
-
+	files []*ast.File
 	// index of type enum declarations
 	/*
 		type Kind int
@@ -33,18 +31,12 @@ type specBinder struct {
 
 // bindSpecs searches for enum types and enum specs and binds them together.
 // It can return an error on every malformed enum spec.
-func bindSpecs(fset *token.FileSet, pkg *ast.Package) (*specBinder, error) {
+func bindSpecs(fset *token.FileSet, pkg string, files []*ast.File) (*specBinder, error) {
 	var binder = &specBinder{
-		files:     make([]*ast.File, 0, len(pkg.Files)),
-		filenames: make(map[*ast.File]string, len(pkg.Files)),
-		index:     make(map[string]*typeAlias, len(pkg.Files)),
-		specs:     make([]*enumSpec, 0, len(pkg.Files)),
+		files: append(files[:0:0], files...),
+		index: make(map[string]*typeAlias, len(files)),
+		specs: make([]*enumSpec, 0, len(files)),
 	}
-	for filename, file := range pkg.Files {
-		binder.filenames[file] = filename
-		binder.files = append(binder.files, file)
-	}
-
 	var filter = []ast.Node{
 		(*ast.TypeSpec)(nil),
 	}
@@ -69,7 +61,7 @@ func bindSpecs(fset *token.FileSet, pkg *ast.Package) (*specBinder, error) {
 		}
 	})
 	for _, spec := range binder.specs {
-		spec.Package = pkg.Name
+		spec.Package = pkg
 	}
 
 	sort.Slice(binder.specs, func(i, j int) bool {
@@ -159,17 +151,23 @@ func (binder *specBinder) ParseSpec(node *ast.TypeSpec) (*enumSpec, bool) {
 	if len(fields) == 0 {
 		return nil, false
 	}
-	var field = fields[0]
+	var t = baseTypeName(fields[0].Type)
+	if t == "" {
+		return nil, false
+	}
 	var spec = &enumSpec{
+		Type:   t,
 		Pos:    specField.Pos(),
 		Format: enumFormatEnum.Strict(),
 	}
-	var tName = typeName(field.Type)
-	if tName == "" {
-		return nil, false
+	for _, field := range fields {
+		var tName = baseTypeName(field.Type)
+		if tName != t {
+			continue
+		}
+		spec.Names = append(spec.Names, field.Names...)
 	}
-	spec.Type = tName
-	spec.Names = append(spec.Names, field.Names...)
+
 	return spec, true
 }
 
@@ -183,19 +181,17 @@ func getField(spec *ast.StructType, name string) *ast.Field {
 		if len(field.Names) != 0 {
 			continue
 		}
-		if typeName(field.Type) == name {
+		if baseTypeName(field.Type) == name {
 			return field
 		}
 	}
 	return nil
 }
 
-func typeName(node ast.Expr) string {
+func baseTypeName(node ast.Expr) string {
 	switch node := node.(type) {
 	case *ast.Ident:
 		return node.String()
-	case *ast.StarExpr:
-		return typeName(node.X)
 	default:
 		return ""
 	}
