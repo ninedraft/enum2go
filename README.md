@@ -8,6 +8,7 @@
 - [Licensing](#licensing)
   - [Code generation output](#code-generation-output)
   - [Tool source code](#tool-source-code)
+- [Contributors](#contributors)
 
 ## Installation
 
@@ -106,3 +107,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Contributors
+[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/0)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/0)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/1)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/1)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/2)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/2)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/3)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/3)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/4)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/4)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/5)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/5)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/6)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/6)[![](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/images/7)](https://sourcerer.io/fame/ninedraft/ninedraft/enum2go/links/7)
