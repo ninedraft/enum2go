@@ -61,7 +61,7 @@ For the Fruit type tool will generate util methods such as `.String`, `.MarshalT
 ### CLI
 
 ```sh
-enum2go -dir ./
+enum2go --dir ./
 ```
 
 ### Flags
